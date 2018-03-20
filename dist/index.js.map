@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":"AACA,OAAO,CAAC,qBAAqB,CAAC,CAAC;AAC/B,OAAO,CAAC,OAAO,CAAC,CAAC","sourcesContent":["// require('babel-register');\r\nrequire('babel-core/register');\r\nrequire('./app');"]}

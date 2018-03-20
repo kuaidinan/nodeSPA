@@ -1,0 +1,1 @@
+{"version":3,"file":"default.js","sourceRoot":"","sources":["../../src/config/default.ts"],"names":[],"mappings":"AAAA,YAAY,CAAC;AAEb,MAAM,CAAC,OAAO,GAAG;IACb,IAAI,EAAC,IAAI;CACZ,CAAA","sourcesContent":["'use strict';\r\n\r\nmodule.exports = {\r\n    port:8080\r\n}"]}
