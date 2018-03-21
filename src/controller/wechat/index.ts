@@ -8,6 +8,10 @@ const config = require('config-lite')(__dirname);
 var GET_TOKEN_API  = 'https://api.weixin.qq.com/cgi-bin/token?';
 
 export default class Wechat {
+    tt(params:any) {
+        console.log('123123123123123123')
+        return 2;
+    }
     async getAccessToken() {
         return new Promise((resolve,reject) => {
             HttpRequest({
@@ -52,5 +56,19 @@ export default class Wechat {
                 res.send('err');  
             } 
         })
+    }
+    async getMenu(req:Request,res:Response) {
+        console.log('this',new Wechat().tt(1))
+        // this.tt('123')
+        // this.getAccessToken().then((token) => {
+        //     HttpRequest({
+        //         method:'get',
+        //         url:`${config.prefix}/menu/get?access_token=${token}`
+        //     },(error,response,body) => {
+        //         res.send({
+        //             error,response,body
+        //         })
+        //     })
+        // })
     }
 }

@@ -2,7 +2,8 @@
 
 module.exports = {
     port:8080,
-    url:'mongodb://localhost:27017/mynode',
+    // url:'mongodb://localhost:27017/mynode',
+    url:'mongodb://xuqiangadmin:wojiaoxq251980@47.104.26.54:27017/wechat?authSource=admin',
     session: {
         name:'mynode',
         secret:'mynode',

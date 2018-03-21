@@ -1,6 +1,5 @@
 import * as express from 'express';
-// import connectMongo from 'connect-mongo';
-// import * as session from 'express-session';
+const mongoose = require('mongoose');
 import * as cookieParser from 'cookie-parser';
 import * as history from 'connect-history-api-fallback';
 // import * as Redis from 'ioredis';
@@ -25,18 +24,7 @@ app.all('*', (req, res, next) => {
 	}
 });
 
-// const MongoStore = connectMongo(session);
-app.use(cookieParser());
-// app.use(session({
-//     name:config.session.name,
-//     secret:config.session.secret,
-//     resave:true,
-//     saveUninitialized:false,
-//     cookie:config.session.cookie,
-//     store:new MongoStore({
-//         url:config.url
-//     })
-// }))
+mongoose.connect(config.url)
 
 // new Redis(config.redis)
 

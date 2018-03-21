@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-const cookieParser = require("cookie-parser");
+const mongoose = require('mongoose');
 const history = require("connect-history-api-fallback");
 const index_1 = require("./routes/index");
 const app = express();
@@ -19,7 +19,7 @@ app.all('*', (req, res, next) => {
         next();
     }
 });
-app.use(cookieParser());
+mongoose.connect(config.url);
 index_1.default(app);
 app.use(history());
 app.use(express.static('../public'));

@@ -13,6 +13,10 @@ var sha1 = require('sha1');
 const config = require('config-lite')(__dirname);
 var GET_TOKEN_API = 'https://api.weixin.qq.com/cgi-bin/token?';
 class Wechat {
+    tt(params) {
+        console.log('123123123123123123');
+        return 2;
+    }
     getAccessToken() {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
@@ -59,6 +63,11 @@ class Wechat {
                     res.send('err');
                 }
             });
+        });
+    }
+    getMenu(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('this', new Wechat().tt(1));
         });
     }
 }
