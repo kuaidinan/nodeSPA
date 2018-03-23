@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 export default class Wechat {
-    tt(params: any): number;
     getAccessToken(): Promise<{}>;
-    sign(req: Request, res: Response): Promise<{}>;
+    sign(req: Request, res: Response): Promise<void>;
     getMenu(req: Request, res: Response): Promise<void>;
 }
+export declare function updateAccessToken(): Promise<{}>;

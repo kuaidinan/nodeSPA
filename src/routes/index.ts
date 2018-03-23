@@ -1,7 +1,6 @@
 'use strict';
-
-import wechat from './wechat'
 import participant from './participant'
+import wechat from './wechat'
 import { Express } from 'express';
 
 export default (app:Express) => {

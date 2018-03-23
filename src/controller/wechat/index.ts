@@ -2,73 +2,81 @@
 
 import { Request,Response } from 'express';
 import * as HttpRequest from "request";
+import { sign,fetch,saveRedis,getRedis } from '../../common/utils';
 var sha1 = require('sha1'); 
 const config = require('config-lite')(__dirname);
 
-var GET_TOKEN_API  = 'https://api.weixin.qq.com/cgi-bin/token?';
-
 export default class Wechat {
-    tt(params:any) {
-        console.log('123123123123123123')
-        return 2;
-    }
-    async getAccessToken() {
+    getAccessToken() {
         return new Promise((resolve,reject) => {
-            HttpRequest({
+            fetch({
                 method: "get",
-                url: `${GET_TOKEN_API}grant_type=client_credential&appid=${config.wechat.appID}&secret=${config.wechat.appSecret}`,
-            }, (error, response, body) => {
-                if (error) {
-                    reject(error);
-                    return;
-                }
+                url: `${config.wechat.prefix}/token?grant_type=client_credential&appid=${config.wechat.appID}&secret=${config.wechat.appSecret}`,
+            }).then((result:any) => {
+                console.log('result',result)
+                console.log(`${config.wechat.prefix}/grant_type=client_credential&appid=${config.wechat.appID}&secret=${config.wechat.appSecret}`)
                 var json:any;
                 
-                try {
-                    json = JSON.parse(body);
-                } catch(err) {
-                    throw new error(err);
-                }
-                
+                json = JSON.parse(result);
                 if (!json.access_token || json.errorcode) {
                     reject(json);
                     return;
                 }
                 json["timeStamp"] = Date.now();
-                // redis.set(rAccessTokenKey, JSON.stringify(json));
+                console.log('123',json)
                 resolve(json);
-            });
+            }).catch((error) => {
+                reject(error)
+                throw new Error(error)
+            })
         })
     }
     async sign(req:Request,res:Response) {
-        return new Promise(() => {
-            var q = req.query;
-            var token = config.wechat.token;  
-            var signature = q.signature; //微信加密签名  
-            var nonce = q.nonce; //随机数  
-            var timestamp = q.timestamp; //时间戳
-            var echostr = q.echostr; //随机字符串
-            var str = [token, timestamp, nonce].sort().join('');
-            var sha = sha1(str);  
-            if (sha == signature) {
-                res.send(echostr+'')
-            }else{  
-                res.send('err');  
-            } 
-        })
+        sign(req,res)
     }
-    async getMenu(req:Request,res:Response) {
-        console.log('this',new Wechat().tt(1))
-        // this.tt('123')
-        // this.getAccessToken().then((token) => {
-        //     HttpRequest({
-        //         method:'get',
-        //         url:`${config.prefix}/menu/get?access_token=${token}`
-        //     },(error,response,body) => {
-        //         res.send({
-        //             error,response,body
-        //         })
-        //     })
+    public async getMenu(req:Request,res:Response) {
+        const token = await updateAccessToken()
+        console.log('token',token)
+        // var token = await new Wechat().getAccessToken()
+        // fetch({
+        //     method:'get',
+        //     url:`${config.wechat.prefix}/menu/get?access_token=${token}`
+        // }).then((result:any) => {
+        //     res.send(result.access_token)
+        // }).catch((error) => {
+        //     throw new Error(error)
         // })
     }
+}
+
+export function updateAccessToken() {
+    return new Promise((resolve,reject) => {
+        getRedis(config.wechat.token)
+            .then((res) => {
+                resolve(res)
+            }).catch((error) => {
+                reject(error)
+                throw new Error(error)
+            })
+    }).then(res => new Promise((resolve,reject) => {
+        if(res) {
+            resolve(res)
+        } else {
+            new Wechat().getAccessToken().then((res:any) => {
+                saveRedis(config.wechat.token,res.access_token,100)
+                    .then((success) => {
+                        resolve(res.access_token)
+                    }).catch((error:any) => {
+                        reject(error)
+                        throw new Error(error)
+                    })
+            }).catch((error) => {
+                console.log('error2',error)
+                reject(error)
+                throw new Error(error)
+            })
+        }
+    })).catch(error => {
+        throw new Error(error)
+    })
 }

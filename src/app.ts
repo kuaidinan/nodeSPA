@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 import * as cookieParser from 'cookie-parser';
 import * as history from 'connect-history-api-fallback';
 // import * as Redis from 'ioredis';
-// var Redis = require('ioredis')
+var Redis = require('ioredis')
 import router from './routes/index';
 
 const app = express();
@@ -24,9 +24,13 @@ app.all('*', (req, res, next) => {
 	}
 });
 
-mongoose.connect(config.url)
+mongoose.connect(config.url).then((result:any) => {
+	console.log('mongoose is connect')
+}).catch((error:any) => {
+	console.log(error)
+})
 
-// new Redis(config.redis)
+new Redis(config.redis)
 
 router(app);
 

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const mongoose = require('mongoose');
 const history = require("connect-history-api-fallback");
+var Redis = require('ioredis');
 const index_1 = require("./routes/index");
 const app = express();
 const config = require('config-lite')(__dirname);
@@ -19,7 +20,12 @@ app.all('*', (req, res, next) => {
         next();
     }
 });
-mongoose.connect(config.url);
+mongoose.connect(config.url).then((result) => {
+    console.log('mongoose is connect');
+}).catch((error) => {
+    console.log(error);
+});
+new Redis(config.redis);
 index_1.default(app);
 app.use(history());
 app.use(express.static('../public'));
