@@ -18,8 +18,6 @@ class Wechat {
                 method: "get",
                 url: `${config.wechat.prefix}/token?grant_type=client_credential&appid=${config.wechat.appID}&secret=${config.wechat.appSecret}`,
             }).then((result) => {
-                console.log('result', result);
-                console.log(`${config.wechat.prefix}/grant_type=client_credential&appid=${config.wechat.appID}&secret=${config.wechat.appSecret}`);
                 var json;
                 json = JSON.parse(result);
                 if (!json.access_token || json.errorcode) {
@@ -63,20 +61,22 @@ function updateAccessToken() {
         }
         else {
             new Wechat().getAccessToken().then((res) => {
-                utils_1.saveRedis(config.wechat.token, res.access_token, 100)
-                    .then((success) => {
-                    resolve(res.access_token);
-                }).catch((error) => {
-                    reject(error);
-                    throw new Error(error);
-                });
+                resolve(res);
             }).catch((error) => {
-                console.log('error2', error);
                 reject(error);
                 throw new Error(error);
             });
         }
-    })).catch(error => {
+    })).then((res) => new Promise((resolve, reject) => {
+        utils_1.saveRedis(config.wechat.token, res.access_token, 100)
+            .then((success) => {
+            resolve(res.access_token);
+        }).catch((error) => {
+            reject(error);
+            throw new Error(error);
+        });
+    }))
+        .catch(error => {
         throw new Error(error);
     });
 }
