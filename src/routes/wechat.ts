@@ -9,5 +9,6 @@ const wechat = new Wechat();
 router.get('/getAccessToken', wechat.getAccessToken);
 router.get('/sign', wechat.sign);
 router.get('/getMenu', wechat.getMenu);
+router.post('/createMenu', wechat.createMenu);
 
 export default router;

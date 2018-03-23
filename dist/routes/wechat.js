@@ -7,5 +7,6 @@ const wechat = new index_1.default();
 router.get('/getAccessToken', wechat.getAccessToken);
 router.get('/sign', wechat.sign);
 router.get('/getMenu', wechat.getMenu);
+router.post('/createMenu', wechat.createMenu);
 exports.default = router;
 //# sourceMappingURL=wechat.js.map

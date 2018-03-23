@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const history = require("connect-history-api-fallback");
 var Redis = require('ioredis');
 const index_1 = require("./routes/index");
+const index_2 = require("./controller/wechat/index");
 const app = express();
 const config = require('config-lite')(__dirname);
 app.all('*', (req, res, next) => {
@@ -27,6 +28,7 @@ mongoose.connect(config.url).then((result) => {
 });
 new Redis(config.redis);
 index_1.default(app);
+app.use(new index_2.default().createMenu);
 app.use(history());
 app.use(express.static('../public'));
 app.listen(config.port, (err) => {

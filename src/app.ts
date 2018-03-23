@@ -5,6 +5,7 @@ import * as history from 'connect-history-api-fallback';
 // import * as Redis from 'ioredis';
 var Redis = require('ioredis')
 import router from './routes/index';
+import Wechat from './controller/wechat/index'
 
 const app = express();
 const config = require('config-lite')(__dirname);
@@ -33,6 +34,8 @@ mongoose.connect(config.url).then((result:any) => {
 new Redis(config.redis)
 
 router(app);
+
+app.use(new Wechat().createMenu)
 
 app.use(history());
 app.use(express.static('../public'))
