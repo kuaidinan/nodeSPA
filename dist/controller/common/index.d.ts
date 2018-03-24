@@ -1,1 +1,1 @@
-export declare function updateAccessToken(): void;
+export declare function getAccessToken(): Promise<{}>;

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = require("../../common/utils");
+const index_1 = require("../common/index");
 var sha1 = require('sha1');
 const config = require('config-lite')(__dirname);
 class Wechat {
@@ -39,7 +40,7 @@ class Wechat {
     }
     getMenu(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const token = yield getAccessToken();
+            const token = yield index_1.getAccessToken();
             utils_1.fetch({
                 method: 'get',
                 url: `${config.wechat.prefix}/menu/get?access_token=${token}`
@@ -51,47 +52,21 @@ class Wechat {
             });
         });
     }
-    createMenu(req, res) {
+    createMenu() {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('123');
-            const token = yield getAccessToken();
-            utils_1.fetch({
+            const token = yield index_1.getAccessToken();
+            return utils_1.fetch({
                 method: 'post',
                 url: `${config.wechat.prefix}/menu/create?access_token=${token}`,
+                json: true,
                 body: {
-                    "button": [
-                        {
+                    "button": [{
                             "type": "click",
-                            "name": "今日歌曲",
+                            "name": "今日歌曲222",
                             "key": "V1001_TODAY_MUSIC"
-                        },
-                        {
-                            "name": "菜单",
-                            "sub_button": [
-                                {
-                                    "type": "view",
-                                    "name": "搜索",
-                                    "url": "http://www.soso.com/"
-                                },
-                                {
-                                    "type": "miniprogram",
-                                    "name": "wxa",
-                                    "url": "http://mp.weixin.qq.com",
-                                    "appid": "wx286b93c14bbf93aa",
-                                    "pagepath": "pages/lunar/index"
-                                },
-                                {
-                                    "type": "click",
-                                    "name": "赞一下我们",
-                                    "key": "V1001_GOOD"
-                                }
-                            ]
-                        }
-                    ]
+                        }]
                 }
             }).then((result) => {
-                console.log(result);
-                res.send(result);
                 return Promise.resolve(result);
             }).catch((error) => {
                 return Promise.reject(error);
@@ -100,37 +75,10 @@ class Wechat {
     }
 }
 exports.default = Wechat;
-function getAccessToken() {
-    return new Promise((resolve, reject) => {
-        utils_1.getRedis(config.wechat.token)
-            .then((res) => {
-            resolve(res);
-        }).catch((error) => {
-            reject(error);
-            throw new Error(error);
-        });
-    }).then(res => new Promise((resolve, reject) => {
-        if (res) {
-            resolve(res);
-        }
-        else {
-            new Wechat().getAccessToken().then((res) => {
-                utils_1.saveRedis(config.wechat.token, res.access_token, 7100)
-                    .then((success) => {
-                    resolve(res.access_token);
-                }).catch((error) => {
-                    reject(error);
-                    throw new Error(error);
-                });
-            }).catch((error) => {
-                reject(error);
-                throw new Error(error);
-            });
-        }
-    }))
-        .catch(error => {
-        throw new Error(error);
+function startCreateMenu() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const result = yield new Wechat().createMenu();
     });
 }
-exports.getAccessToken = getAccessToken;
+exports.startCreateMenu = startCreateMenu;
 //# sourceMappingURL=index.js.map

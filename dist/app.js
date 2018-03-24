@@ -28,7 +28,7 @@ mongoose.connect(config.url).then((result) => {
 });
 new Redis(config.redis);
 index_1.default(app);
-app.use(new index_2.default().createMenu);
+index_2.startCreateMenu();
 app.use(history());
 app.use(express.static('../public'));
 app.listen(config.port, (err) => {

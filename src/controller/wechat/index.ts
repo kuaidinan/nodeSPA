@@ -3,9 +3,12 @@
 import { Request,Response } from 'express';
 import * as HttpRequest from "request";
 import { sign,fetch,saveRedis,getRedis } from '../../common/utils';
+import { getAccessToken } from '../common/index';
 import { resolve } from 'path';
 var sha1 = require('sha1'); 
 const config = require('config-lite')(__dirname);
+
+
 
 export default class Wechat {
     getAccessToken() {
@@ -44,44 +47,19 @@ export default class Wechat {
             return Promise.reject(error)
         })
     }
-    public async createMenu(req:Request,res:Response) {
-        console.log('123')
+    public async createMenu() {
         const token = await getAccessToken()
-        fetch({
+        return fetch({
             method:'post',
             url:`${config.wechat.prefix}/menu/create?access_token=${token}`,
+            json:true,
             body: {
-                "button":[
-                {    
+                "button":[{
                      "type":"click",
-                     "name":"今日歌曲",
-                     "key":"V1001_TODAY_MUSIC"
-                 },
-                 {
-                      "name":"菜单",
-                      "sub_button":[
-                      {    
-                          "type":"view",
-                          "name":"搜索",
-                          "url":"http://www.soso.com/"
-                       },
-                       {
-                            "type":"miniprogram",
-                            "name":"wxa",
-                            "url":"http://mp.weixin.qq.com",
-                            "appid":"wx286b93c14bbf93aa",
-                            "pagepath":"pages/lunar/index"
-                        },
-                       {
-                          "type":"click",
-                          "name":"赞一下我们",
-                          "key":"V1001_GOOD"
-                       }]
-                  }]
-            }
+                     "name":"今日歌曲222",
+                     "key":"V1001_TODAY_MUSIC"}]
+                }
         }).then((result) => {
-            console.log(result)
-            res.send(result);
             return Promise.resolve(result)
         }).catch((error) => {
             return Promise.reject(error)
@@ -89,34 +67,9 @@ export default class Wechat {
     }
 }
 
-export function getAccessToken() {
-    return new Promise((resolve,reject) => {
-        getRedis(config.wechat.token)
-            .then((res) => {
-                resolve(res)
-            }).catch((error) => {
-                reject(error)
-                throw new Error(error)
-            })
-    }).then(res => new Promise((resolve,reject) => {
-        if(res) {
-            resolve(res)
-        } else {
-            new Wechat().getAccessToken().then((res:any) => {
-                saveRedis(config.wechat.token,res.access_token,7100)
-                    .then((success) => {
-                        resolve(res.access_token)
-                    }).catch((error:any) => {
-                        reject(error)
-                        throw new Error(error)
-                    })
-            }).catch((error) => {
-                reject(error)
-                throw new Error(error)
-            })
-        }
-    }))
-    .catch(error => {
-        throw new Error(error)
-    })
+/**
+ * 创建菜单逻辑
+ */
+export async function startCreateMenu() {
+    const result = await new Wechat().createMenu()
 }
