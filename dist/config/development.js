@@ -23,7 +23,31 @@ module.exports = {
         "appSecret": "40c415d310b81e73476a8d8a0673869a",
         "token": "wxexpress",
         "prefix": "https://api.weixin.qq.com/cgi-bin",
-        "mpPrefix": "https://mp.weixin.qq.com/cgi-bin"
+        "mpPrefix": "https://mp.weixin.qq.com/cgi-bin",
+    },
+    wechatMenu: {
+        "button": [
+            {
+                "type": "click",
+                "name": "今日歌曲",
+                "key": "V1001_TODAY_MUSIC"
+            },
+            {
+                "name": "菜单",
+                "sub_button": [
+                    {
+                        "type": "view",
+                        "name": "搜索",
+                        "url": "http://www.soso.com/"
+                    },
+                    {
+                        "type": "click",
+                        "name": "赞一下我们",
+                        "key": "V1001_GOOD"
+                    }
+                ]
+            }
+        ]
     }
 };
 //# sourceMappingURL=development.js.map

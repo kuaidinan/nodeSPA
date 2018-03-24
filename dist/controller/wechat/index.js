@@ -59,13 +59,7 @@ class Wechat {
                 method: 'post',
                 url: `${config.wechat.prefix}/menu/create?access_token=${token}`,
                 json: true,
-                body: {
-                    "button": [{
-                            "type": "click",
-                            "name": "今日歌曲222",
-                            "key": "V1001_TODAY_MUSIC"
-                        }]
-                }
+                body: config.wechatMenu
             }).then((result) => {
                 return Promise.resolve(result);
             }).catch((error) => {
