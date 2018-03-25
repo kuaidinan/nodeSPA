@@ -1,12 +1,15 @@
 'use strict';
 
-import { Request,Response } from 'express';
+import { Request,Response,NextFunction } from 'express';
 import * as HttpRequest from "request";
 import { sign,fetch,saveRedis,getRedis } from '../../common/utils';
 import { getAccessToken } from '../common/index';
 import { resolve } from 'path';
-var sha1 = require('sha1'); 
+import Auth from '../../common/auth'
+const iconv = require('iconv-lite');
+const sha1 = require('sha1'); 
 const config = require('config-lite')(__dirname);
+const auth = new Auth()
 
 export default class Wechat {
     getAccessToken() {
@@ -57,6 +60,28 @@ export default class Wechat {
         }).catch((error) => {
             return Promise.reject(error)
         })
+    }
+    public async requestAuth(req:Request,res:Response) {
+        // return fetch({
+        //     url:`${config.wechat.openPrefix}/connect/oauth2/authorize?appid=${config.wechat.appID}&redirect_uri=${encodeURIComponent(config.domain)}&response_type=code&scope=snsapi_base&state=STATEHello#wechat_redirect`,
+        //     // method:'get',
+        //     encoding :null,
+        // }).then((result:any) => {
+        //     console.log(`${config.wechat.openPrefix}/connect/oauth2/authorize?appid=${config.wechat.appID}&redirect_uri=${encodeURIComponent(config.domain)}&response_type=code&scope=snsapi_base&state=STATEHello#wechat_redirect`)
+        //     var buf
+        //     buf =  iconv.decode(result, 'gb2312');
+        //     return Promise.resolve(buf)
+        // }).catch((error) => {
+        //     return Promise.reject(error)
+        // })
+        // 返回后的地址http://wechat.xuqiang.site/?code=071SiFZ80OcTZH1JquW80As5090SiFZ8&state=STATEHello
+        const redirectUrl = auth.requestUrl(config.domain + '/api/wechat/callBack')
+        console.log('redirectUrl',redirectUrl)
+        // res.redirect(`${config.wechat.openPrefix}/connect/oauth2/authorize?appid=${config.wechat.appID}&redirect_uri=${encodeURIComponent(config.domain)}&response_type=code&scope=snsapi_userinfo&state=STATEHello#wechat_redirect`)
+        res.redirect(redirectUrl)
+    }
+    public async callBack(req:Request,res:Response,next:NextFunction) {
+        res.redirect('/static/')
     }
 }
 

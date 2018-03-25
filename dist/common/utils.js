@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const request = require("request");
-const config = require('config-lite')(__dirname);
 const sha1 = require('sha1');
 const Redis = require('ioredis');
 const redis = new Redis();
+const config = require('config-lite')(__dirname);
 function sign(req, res) {
     var q = req.query;
     var token = config.wechat.token;
@@ -24,7 +24,7 @@ function sign(req, res) {
 exports.sign = sign;
 function fetch(option) {
     return new Promise((resolve, reject) => {
-        request(Object.assign({}, option), (error, response, body) => {
+        request(Object.assign({ gzip: true }, option), (error, res, body) => {
             if (error) {
                 reject(error);
                 return;

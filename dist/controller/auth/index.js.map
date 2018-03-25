@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/controller/auth/index.ts"],"names":[],"mappings":";;AACA,cAA6B,GAAW,EAAC,GAAY,EAAC,IAAiB;IACnE,IAAI,EAAE,CAAA;AACV,CAAC;AAFD,uBAEC","sourcesContent":["import { Request,Response,NextFunction } from 'express';\r\nexport default function auth(req:Request,res:Response,next:NextFunction) {\r\n    next()\r\n}"]}

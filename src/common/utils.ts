@@ -1,9 +1,9 @@
 import { Request,Response } from 'express';
 import * as request from 'request';
-const config = require('config-lite')(__dirname);
 const sha1 = require('sha1');
 const Redis = require('ioredis');
 const redis = new Redis();
+const config = require('config-lite')(__dirname);
 
 export function sign(req:Request,res:Response) {
     var q = req.query;
@@ -23,7 +23,11 @@ export function sign(req:Request,res:Response) {
 
 export function fetch(option:any) {
     return new Promise((resolve,reject) => {
-        request({...option},(error:any,response:any,body:any) => {
+        request(
+            {
+                gzip:true,
+                ...option
+            },(error:any,res:any,body:any) => {
             if(error) {
                 reject(error)
                 return

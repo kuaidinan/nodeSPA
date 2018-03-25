@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -8,19 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-class Participant {
-    getList(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                res.send({
-                    text: '123'
-                });
-            }
-            catch (err) {
-                throw new Error(err);
-            }
-        });
-    }
+const index_1 = require("./index");
+function auth(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        new index_1.default().requestAuth(req, res);
+    });
 }
-exports.default = Participant;
-//# sourceMappingURL=index.js.map
+exports.default = auth;
+//# sourceMappingURL=auth.js.map

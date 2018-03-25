@@ -2,6 +2,7 @@
 module.exports = {
     port: 8080,
     url: 'mongodb://xuqiangadmin:wojiaoxq251980@47.104.26.54:27017/wechat?authSource=admin',
+    domain: 'http://wechat.xuqiang.site',
     session: {
         name: 'mynode',
         secret: 'mynode',
@@ -24,6 +25,7 @@ module.exports = {
         "token": "wxexpress",
         "prefix": "https://api.weixin.qq.com/cgi-bin",
         "mpPrefix": "https://mp.weixin.qq.com/cgi-bin",
+        "openPrefix": "https://open.weixin.qq.com",
     },
     wechatMenu: {
         "button": [
@@ -38,7 +40,7 @@ module.exports = {
                     {
                         "type": "view",
                         "name": "搜索",
-                        "url": "http://www.soso.com/"
+                        "url": "http://wechat.xuqiang.site/#/"
                     },
                     {
                         "type": "click",

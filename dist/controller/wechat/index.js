@@ -10,8 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = require("../../common/utils");
 const index_1 = require("../common/index");
-var sha1 = require('sha1');
+const auth_1 = require("../../common/auth");
+const iconv = require('iconv-lite');
+const sha1 = require('sha1');
 const config = require('config-lite')(__dirname);
+const auth = new auth_1.default();
 class Wechat {
     getAccessToken() {
         return new Promise((resolve, reject) => {
@@ -65,6 +68,18 @@ class Wechat {
             }).catch((error) => {
                 return Promise.reject(error);
             });
+        });
+    }
+    requestAuth(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const redirectUrl = auth.requestUrl(config.domain + '/api/wechat/callBack');
+            console.log('redirectUrl', redirectUrl);
+            res.redirect(redirectUrl);
+        });
+    }
+    callBack(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            res.redirect('/static/');
         });
     }
 }

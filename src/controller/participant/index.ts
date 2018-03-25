@@ -9,7 +9,6 @@ export default class Participant {
                 text:'123'
             })
         }catch(err) {
-            console.log(err);
             throw new Error(err);
         }
     }
